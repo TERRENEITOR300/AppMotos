@@ -1,10 +1,10 @@
 const CACHE_NAME = 'motorace-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/AppMotos/',
+  '/AppMotos/index.html',
+  '/AppMotos/manifest.json',
+  '/AppMotos/icon-192.png',
+  '/AppMotos/icon-512.png'
 ];
 
 // Instalar y guardar archivos en caché

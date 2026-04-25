@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MotoRace — Inscripción al Torneo</title>
+
+  <!-- ✅ PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#E8290B" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MotoRace" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* =====================================================
+       VARIABLES — cambia colores aquí fácilmente
+    ====================================================== */
+    :root {
+      --rojo:       #E8290B;   /* color acento principal */
+      --rojo-dark:  #B01E07;
+      --negro:      #0A0A0A;
+      --gris-oscuro:#141414;
+      --gris-panel: #1C1C1C;
+      --gris-borde: #2E2E2E;
+      --gris-input: #222222;
+      --blanco:     #F5F5F0;
+      --blanco-dim: #AAAAAA;
+      --fuente-titulo: 'Bebas Neue', sans-serif;
+      --fuente-cuerpo: 'Barlow', sans-serif;
+      --fuente-cond:   'Barlow Condensed', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--negro);
+      color: var(--blanco);
+      font-family: var(--fuente-cuerpo);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── FONDO con líneas diagonales ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,0.012) 40px,
+        rgba(255,255,255,0.012) 41px
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      border-bottom: 1px solid var(--gris-borde);
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(8px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+    }
+
+    .logo-text {
+      font-family: var(--fuente-titulo);
+      font-size: 1.9rem;
+      letter-spacing: 3px;
+      line-height: 1;
+      color: var(--blanco);
+    }
+
+    .logo-text span { color: var(--rojo); }
+
+    .header-badge {
+      font-family: var(--fuente-cond);
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--rojo);
+      border: 1px solid var(--rojo);
+      padding: 4px 12px;
+      border-radius: 2px;
+    }
+
+    /* ── NAV TABS ── */
+    nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      background: var(--gris-oscuro);
+      border-bottom: 1px solid var(--gris-borde);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 1rem;
+      font-family: var(--fuente-cond);
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--blanco-dim);
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover { color: var(--blanco); background: rgba(255,255,255,0.04); }
+    .tab-btn.active { color: var(--rojo); border-bottom-color: var(--rojo); background: rgba(232,41,11,0.06); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: 'RACE';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--fuente-titulo);
+      font-size: clamp(80px, 20vw, 200px);
+      color: rgba(255,255,255,0.03);
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: 20px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--fuente-cond);
+      font-size: 0.8rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--rojo);
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-family: var(--fuente-titulo);
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: 4px;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--rojo);
+      display: block;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--blanco-dim);
+      font-weight: 300;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: var(--fuente-titulo);
+      font-size: 2.2rem;
+      color: var(--rojo);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: var(--fuente-cond);
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--blanco-dim);
+      margin-top: 4px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      position: relative;
+      z-index: 5;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    /* ── VIEWS ── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── FORMULARIO ── */
+    .form-card {
+      background: var(--gris-panel);
+      border: 1px solid var(--gris-borde);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .form-card-header {
+      background: var(--gris-oscuro);
+      border-bottom: 1px solid var(--gris-borde);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .form-card-header-bar {
+      width: 4px;
+      height: 20px;
+      background: var(--rojo);
+      border-radius: 2px;
+    }
+
+    .form-card-header h3 {
+      font-family: var(--fuente-cond);
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--blanco-dim);
+    }
+
+    .form-body {
+      padding: 1.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-grid.cols-1 { grid-template-columns: 1fr; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field.span-2 { grid-column: span 2; }
+
+    label {
+      font-family: var(--fuente-cond);
+      font-size: 0.72rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--blanco-dim);
+    }
+
+    label .req { color: var(--rojo); }
+
+    input, select, textarea {
+      width: 100%;
+      background: var(--gris-input);
+      border: 1px solid var(--gris-borde);
+      border-radius: 3px;
+      color: var(--blanco);
+      font-family: var(--fuente-cuerpo);
+      font-size: 0.95rem;
+      padding: 0.65rem 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input::placeholder, textarea::placeholder { color: #555; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--rojo);
+      box-shadow: 0 0 0 2px rgba(232,41,11,0.15);
+    }
+
+    select option { background: var(--gris-panel); }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* ── CATEGORÍAS ── */
+    .cats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.7rem;
+    }
+
+    .cat-card {
+      border: 1px solid var(--gris-borde);
+      border-radius: 3px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--gris-input);
+      text-align: center;
+    }
+
+    .cat-card:hover { border-color: #555; background: #2a2a2a; }
+    .cat-card.selected { border-color: var(--rojo); background: rgba(232,41,11,0.1); }
+
+    .cat-icon { font-size: 1.4rem; margin-bottom: 6px; }
+
+    .cat-name {
+      font-family: var(--fuente-cond);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .cat-cc {
+      font-size: 0.72rem;
+      color: var(--blanco-dim);
+      display: block;
+      margin-top: 2px;
+    }
+
+    input[type="radio"].cat-radio { display: none; }
+
+    /* ── BOTÓN PRINCIPAL ── */
+    .btn-submit {
+      width: 100%;
+      padding: 1.1rem;
+      background: var(--rojo);
+      color: var(--blanco);
+      border: none;
+      border-radius: 3px;
+      font-family: var(--fuente-titulo);
+      font-size: 1.3rem;
+      letter-spacing: 4px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+    }
+
+    .btn-submit:hover { background: var(--rojo-dark); }
+    .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled { background: #444; cursor: not-allowed; }
+
+    /* ── TOAST / ALERTA ── */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--gris-panel);
+      border: 1px solid var(--gris-borde);
+      border-left: 4px solid var(--rojo);
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      font-family: var(--fuente-cond);
+      letter-spacing: 1px;
+      font-size: 0.95rem;
+      z-index: 9999;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+      opacity: 0;
+      white-space: nowrap;
+    }
+
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    #toast.success { border-left-color: #2ecc71; }
+    #toast.error   { border-left-color: var(--rojo); }
+
+    /* ── TABLA DE COMPETIDORES ── */
+    .pilots-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .pilots-title {
+      font-family: var(--fuente-titulo);
+      font-size: 2rem;
+      letter-spacing: 3px;
+    }
+
+    .pilots-count {
+      font-family: var(--fuente-cond);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--rojo);
+      background: rgba(232,41,11,0.1);
+      border: 1px solid rgba(232,41,11,0.3);
+      padding: 4px 12px;
+      border-radius: 2px;
+    }
+
+    .search-box {
+      width: 100%;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .search-box input {
+      padding-left: 2.2rem;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.7rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    .table-wrapper { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    thead tr {
+      border-bottom: 2px solid var(--rojo);
+    }
+
+    th {
+      font-family: var(--fuente-cond);
+      font-size: 0.72rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--blanco-dim);
+      padding: 0.8rem 0.9rem;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--gris-borde);
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+    td {
+      padding: 0.9rem 0.9rem;
+      color: var(--blanco);
+      vertical-align: middle;
+    }
+
+    .num-badge {
+      display: inline-block;
+      background: var(--rojo);
+      color: #fff;
+      font-family: var(--fuente-titulo);
+      font-size: 1rem;
+      letter-spacing: 1px;
+      width: 36px;
+      height: 36px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cat-badge {
+      display: inline-block;
+      font-family: var(--fuente-cond);
+      font-size: 0.72rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+      border: 1px solid;
+    }
+
+    .cat-badge.Pro     { color: #F0A500; border-color: rgba(240,165,0,0.4); background: rgba(240,165,0,0.1); }
+    .cat-badge.Amateur { color: #5BC0EB; border-color: rgba(91,192,235,0.4); background: rgba(91,192,235,0.1); }
+    .cat-badge.Junior  { color: #2ecc71; border-color: rgba(46,204,113,0.4); background: rgba(46,204,113,0.1); }
+    .cat-badge.Vintage { color: #E88C30; border-color: rgba(232,140,48,0.4); background: rgba(232,140,48,0.1); }
+    .cat-badge.Electrica{ color: #A8D8EA; border-color: rgba(168,216,234,0.4); background: rgba(168,216,234,0.1); }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--blanco-dim);
+    }
+
+    .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+    .empty-text { font-family: var(--fuente-cond); letter-spacing: 2px; font-size: 0.85rem; text-transform: uppercase; }
+
+    /* ── LOADING SPINNER ── */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--gris-borde);
+      font-family: var(--fuente-cond);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #444;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+      .field.span-2 { grid-column: span 1; }
+      header { padding: 1rem 1.2rem; }
+      .stats-bar { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <svg class="logo-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="21" cy="21" r="20" stroke="#E8290B" stroke-width="1.5"/>
+        <path d="M8 24c0-7 6-13 13-13s13 6 13 13" stroke="#E8290B" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="13" cy="26" r="4" fill="#E8290B"/>
+        <circle cx="29" cy="26" r="4" fill="#E8290B"/>
+        <path d="M13 26h16M17 20l4-6 4 6" stroke="#F5F5F0" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <span class="logo-text">MOTO<span>RACE</span></span>
+    </div>
+    <span class="header-badge">Temporada 2025</span>
+  </header>
+
+  <!-- NAV TABS -->
+  <nav>
+    <button class="tab-btn active" onclick="switchTab('inscripcion', this)">⚡ Inscripción</button>
+    <button class="tab-btn" onclick="switchTab('pilotos', this)">🏁 Competidores</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">⚑ Gran Torneo Nacional</p>
+    <h1 class="hero-title">
+      Inscríbete al<em>Torneo</em>
+    </h1>
+    <p class="hero-desc">Demuestra tu velocidad en la pista. Completa tu inscripción y únete a los mejores pilotos del país.</p>
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-num" id="stat-inscritos">—</div>
+        <div class="stat-label">Inscritos</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Categorías</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">60</div>
+        <div class="stat-label">Cupos máx.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- ════ VISTA INSCRIPCIÓN ════ -->
+    <div id="view-inscripcion" class="view active">
+
+      <!-- Datos personales -->
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="form-card-header-bar"></div>
+          <h3>Datos del Piloto</h3>
+        </div>
+        <div class="form-body">
+          <div class="form-grid">
+            <div class="field">
+              <label>Nombre completo <span class="req">*</span></label>
+              <input type="text" id="nombre" placeholder="Ej. Carlos Ramírez" required />
+            </div>
+            <div class="field">
+              <label>Correo electrónico <span class="req">*</span></label>
+              <input type="email" id="correo" placeholder="piloto@email.com" required />
+            </div>
+            <div class="field">
+              <label>Teléfono <span class="req">*</span></label>
+              <input type="tel" id="telefono" placeholder="+52 311 000 0000" required />
+            </div>
+            <div class="field">
+              <label>Fecha de nacimiento <span class="req">*</span></label>
+              <input type="date" id="fecha_nac" required />
+            </div>
+            <div class="field">
+              <label>Número de licencia</label>
+              <input type="text" id="licencia" placeholder="Ej. LIC-2025-001" />
+            </div>
+            <div class="field">
+              <label>Número de piloto <span class="req">*</span></label>
+              <input type="number" id="numero" placeholder="Ej. 7" min="1" max="999" required />
+            </div>
+            <div class="field span-2">
+              <label>Ciudad / Estado</label>
+              <input type="text" id="ciudad" placeholder="Ej. Guadalajara, Jalisco" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Datos de la moto -->
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="form-card-header-bar"></div>
+          <h3>Datos de la Moto</h3>
+        </div>
+        <div class="form-body">
+          <div class="form-grid cols-3">
+            <div class="field">
+              <label>Marca <span class="req">*</span></label>
+              <select id="marca" required>
+                <option value="">Selecciona marca</option>
+                <option>Yamaha</option>
+                <option>Honda</option>
+                <option>Kawasaki</option>
+                <option>Suzuki</option>
+                <option>Ducati</option>
+                <option>KTM</option>
+                <option>BMW</option>
+                <option>Aprilia</option>
+                <option>Triumph</option>
+                <option>Husqvarna</option>
+                <option>Royal Enfield</option>
+                <option>Otra</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Modelo</label>
+              <input type="text" id="modelo" placeholder="Ej. R6, CBR600" />
+            </div>
+            <div class="field">
+              <label>Año</label>
+              <input type="number" id="anio" placeholder="Ej. 2022" min="1970" max="2026" />
+            </div>
+            <div class="field">
+              <label>Motor (cc) <span class="req">*</span></label>
+              <select id="motor" required>
+                <option value="">Selecciona motor</option>
+                <option>Hasta 125cc</option>
+                <option>126cc - 250cc</option>
+                <option>251cc - 400cc</option>
+                <option>401cc - 600cc</option>
+                <option>601cc - 1000cc</option>
+                <option>Más de 1000cc</option>
+                <option>Eléctrica</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Color de moto</label>
+              <input type="text" id="color_moto" placeholder="Ej. Rojo/Negro" />
+            </div>
+            <div class="field">
+              <label>No. de serie / VIN</label>
+              <input type="text" id="vin" placeholder="Ej. 1HGBH41JXMN109186" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categoría -->
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="form-card-header-bar"></div>
+          <h3>Categoría de Competencia</h3>
+        </div>
+        <div class="form-body">
+          <div class="cats" id="categorias">
+            <label class="cat-card" onclick="selectCat(this, 'Pro')">
+              <input type="radio" name="categoria" value="Pro" class="cat-radio">
+              <div class="cat-icon">🏆</div>
+              <span class="cat-name">Pro</span>
+              <span class="cat-cc">Abierta</span>
+            </label>
+            <label class="cat-card" onclick="selectCat(this, 'Amateur')">
+              <input type="radio" name="categoria" value="Amateur" class="cat-radio">
+              <div class="cat-icon">🏍️</div>
+              <span class="cat-name">Amateur</span>
+              <span class="cat-cc">Hasta 600cc</span>
+            </label>
+            <label class="cat-card" onclick="selectCat(this, 'Junior')">
+              <input type="radio" name="categoria" value="Junior" class="cat-radio">
+              <div class="cat-icon">⭐</div>
+              <span class="cat-name">Junior</span>
+              <span class="cat-cc">Hasta 250cc</span>
+            </label>
+            <label class="cat-card" onclick="selectCat(this, 'Vintage')">
+              <input type="radio" name="categoria" value="Vintage" class="cat-radio">
+              <div class="cat-icon">🔧</div>
+              <span class="cat-name">Vintage</span>
+              <span class="cat-cc">Pre-1990</span>
+            </label>
+            <label class="cat-card" onclick="selectCat(this, 'Electrica')">
+              <input type="radio" name="categoria" value="Electrica" class="cat-radio">
+              <div class="cat-icon">⚡</div>
+              <span class="cat-name">Eléctrica</span>
+              <span class="cat-cc">Solo EV</span>
+            </label>
+          </div>
+          <input type="hidden" id="categoria" />
+        </div>
+      </div>
+
+      <!-- Información adicional -->
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="form-card-header-bar"></div>
+          <h3>Información Adicional</h3>
+        </div>
+        <div class="form-body">
+          <div class="form-grid cols-1">
+            <div class="field">
+              <label>Experiencia en carreras</label>
+              <select id="experiencia">
+                <option value="">Selecciona nivel</option>
+                <option>Principiante (0-1 años)</option>
+                <option>Intermedio (2-4 años)</option>
+                <option>Avanzado (5-9 años)</option>
+                <option>Profesional (10+ años)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Comentarios o notas</label>
+              <textarea id="notas" placeholder="Cualquier información adicional relevante..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTÓN ENVIAR -->
+      <button class="btn-submit" id="btn-submit" onclick="inscribir()">
+        <span id="btn-text">CONFIRMAR INSCRIPCIÓN</span>
+      </button>
+
+    </div>
+    <!-- FIN VISTA INSCRIPCIÓN -->
+
+
+    <!-- ════ VISTA PILOTOS ════ -->
+    <div id="view-pilotos" class="view">
+      <div class="pilots-header">
+        <h2 class="pilots-title">Pilotos Inscritos</h2>
+        <span class="pilots-count" id="count-badge">Cargando...</span>
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="buscador" placeholder="Buscar piloto, moto o categoría..." oninput="filtrarPilotos()" />
+      </div>
+
+      <div class="table-wrapper">
+        <table id="tabla-pilotos">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Moto</th>
+              <th>Motor</th>
+              <th>Categoría</th>
+              <th>Ciudad</th>
+              <th>Inscrito</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div id="empty-state" class="empty-state" style="display:none;">
+        <div class="empty-icon">🏁</div>
+        <div class="empty-text">Sin resultados</div>
+      </div>
+    </div>
+    <!-- FIN VISTA PILOTOS -->
+
+  </main>
+
+  <footer>
+    &copy; 2025 MotoRace — Todos los derechos reservados
+  </footer>
+
+  <!-- TOAST -->
+  <div id="toast"></div>
+
+
+  <!-- ══════════════════════════════════════════════
+       FIREBASE SDK  (módulos ESM)
+       ══════════════════════════════════════════════ -->
+  <script type="module">
+
+    const firebaseConfig = {
+      apiKey:            "AIzaSyD4fh99Da0PKxe0EfL9w24nEaKToVNQKek",
+      authDomain:        "appmotos-449c0.firebaseapp.com",
+      databaseURL:       "https://appmotos-449c0-default-rtdb.firebaseio.com",
+      projectId:         "appmotos-449c0",
+      storageBucket:     "appmotos-449c0.firebasestorage.app",
+      messagingSenderId: "723093403712",
+      appId:             "1:723093403712:web:c09704d5cca9f3d8eb87a5"
+    };
+
+    import { initializeApp }                         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, push, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+
+    window._db = db;
+
+    window.inscribir = async function() {
+      const campos = {
+        nombre:     document.getElementById('nombre').value.trim(),
+        correo:     document.getElementById('correo').value.trim(),
+        telefono:   document.getElementById('telefono').value.trim(),
+        fecha_nac:  document.getElementById('fecha_nac').value,
+        numero:     document.getElementById('numero').value,
+        licencia:   document.getElementById('licencia').value.trim(),
+        ciudad:     document.getElementById('ciudad').value.trim(),
+        marca:      document.getElementById('marca').value,
+        modelo:     document.getElementById('modelo').value.trim(),
+        anio:       document.getElementById('anio').value,
+        motor:      document.getElementById('motor').value,
+        color_moto: document.getElementById('color_moto').value.trim(),
+        vin:        document.getElementById('vin').value.trim(),
+        categoria:  document.getElementById('categoria').value,
+        experiencia:document.getElementById('experiencia').value,
+        notas:      document.getElementById('notas').value.trim(),
+        fecha_registro: new Date().toISOString()
+      };
+
+      const requeridos = ['nombre','correo','telefono','fecha_nac','numero','marca','motor','categoria'];
+      for (const c of requeridos) {
+        if (!campos[c]) {
+          showToast(`❌ El campo "${c.replace('_',' ')}" es obligatorio`, 'error');
+          return;
+        }
+      }
+
+      const btn  = document.getElementById('btn-submit');
+      const text = document.getElementById('btn-text');
+      btn.disabled = true;
+      text.innerHTML = '<span class="spinner"></span>&nbsp;Guardando...';
+
+      try {
+        const competidoresRef = ref(db, 'competidores');
+        await push(competidoresRef, campos);
+        showToast('✅ ¡Inscripción exitosa! Bienvenido al torneo.', 'success');
+        document.querySelectorAll('input:not([type=radio]):not([type=hidden]), select, textarea')
+          .forEach(el => el.value = '');
+        document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+        document.getElementById('categoria').value = '';
+      } catch (e) {
+        console.error(e);
+        showToast('❌ Error al guardar. Verifica tu conexión y firebaseConfig.', 'error');
+      } finally {
+        btn.disabled = false;
+        text.textContent = 'CONFIRMAR INSCRIPCIÓN';
+      }
+    };
+
+    let allPilotos = [];
+
+    const competidoresRef = ref(db, 'competidores');
+    onValue(competidoresRef, (snapshot) => {
+      const data = snapshot.val();
+      allPilotos = data ? Object.values(data) : [];
+      document.getElementById('stat-inscritos').textContent = allPilotos.length;
+      document.getElementById('count-badge').textContent = `${allPilotos.length} inscritos`;
+      renderTabla(allPilotos);
+    });
+
+    window.filtrarPilotos = function() {
+      const q = document.getElementById('buscador').value.toLowerCase();
+      const filtrados = allPilotos.filter(p =>
+        (p.nombre     || '').toLowerCase().includes(q) ||
+        (p.marca      || '').toLowerCase().includes(q) ||
+        (p.modelo     || '').toLowerCase().includes(q) ||
+        (p.categoria  || '').toLowerCase().includes(q) ||
+        (p.ciudad     || '').toLowerCase().includes(q)
+      );
+      renderTabla(filtrados);
+    };
+
+    function renderTabla(lista) {
+      const tbody  = document.getElementById('tbody');
+      const empty  = document.getElementById('empty-state');
+      tbody.innerHTML = '';
+
+      if (!lista.length) {
+        empty.style.display = 'block';
+        return;
+      }
+
+      empty.style.display = 'none';
+
+      lista.forEach((p, i) => {
+        const fecha = p.fecha_registro
+          ? new Date(p.fecha_registro).toLocaleDateString('es-MX',{ day:'2-digit', month:'short', year:'numeric' })
+          : '—';
+        const moto = [p.marca, p.modelo, p.anio].filter(Boolean).join(' ') || '—';
+
+        tbody.innerHTML += `
+          <tr>
+            <td><div class="num-badge">${p.numero || (i+1)}</div></td>
+            <td><strong>${p.nombre || '—'}</strong><br><span style="font-size:0.78rem;color:#888;">${p.correo || ''}</span></td>
+            <td>${moto}</td>
+            <td>${p.motor || '—'}</td>
+            <td><span class="cat-badge ${p.categoria || ''}">${p.categoria || '—'}</span></td>
+            <td style="color:#888">${p.ciudad || '—'}</td>
+            <td style="color:#888;font-size:0.8rem;">${fecha}</td>
+          </tr>`;
+      });
+    }
+
+  </script>
+
+  <!-- ══ Scripts globales ══ -->
+  <script>
+    function switchTab(vista, btn) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('view-' + vista).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function selectCat(el, val) {
+      document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('categoria').value = val;
+    }
+
+    function showToast(msg, tipo) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'show ' + (tipo || '');
+      setTimeout(() => t.className = '', 3500);
+    }
+
+    /* ✅ Registrar Service Worker */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(() => console.log('✅ Service Worker registrado'))
+          .catch(err => console.error('SW error:', err));
+      });
+    }
+  </script>
+
+</body>
+</html>
